@@ -9,8 +9,8 @@ program to give a visual example of the brute force/naive method to solving the 
 
 To view this program on your own, you will need a code editor or IDE (Visual Studio Code is reccomended if you don't have one).
 Next, download the files by pressing the <> Code button on GitHub and then Download. 
-Next, unzip the download and then open [tsp_visualization.py](travelling_salesman_visualization/tsp_visualization.py) in VSCode. 
-Ensure you have the packages installed on your computer that are shown in the [requirements.txt](travelling_salesman_visualization/requirements.txt) file, 
+Next, unzip the download and then open [tsp_visualization.py](tsp_visualization.py) in VSCode. 
+Ensure you have the packages installed on your computer that are shown in the [requirements.txt](requirements.txt) file, 
 as well as [Python](https://www.python.org/downloads/).
 Finally, press the play/run button in VSCode.
 
