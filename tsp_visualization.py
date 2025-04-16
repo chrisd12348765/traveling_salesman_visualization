@@ -5,6 +5,8 @@ from matplotlib.widgets import Slider
 from itertools import permutations
 import sys
 
+frames_per_update_var = 500
+
 def calculate_distance(path, points):
     """Calculate the total distance of a path."""
     total_distance = 0
@@ -63,7 +65,7 @@ def update(frame, ax, points, all_paths, distances, best_path_info, n_cities):
         print(f"Error in update function: {e}")
         return ax,
 
-def update_cities(val, fig, ax, slider_ax, points_var, all_paths_var, distances_var, best_path_info_var, anim_var, n_cities_var):
+def update_cities(val, fig, ax, points_var, all_paths_var, distances_var, best_path_info_var, anim_var, n_cities_var):
     """Update the number of cities when the slider changes."""
     try:
         # Get the new number of cities
@@ -99,7 +101,7 @@ def update_cities(val, fig, ax, slider_ax, points_var, all_paths_var, distances_
             fig, update,
             frames=len(all_paths),
             fargs=(ax, points, all_paths, distances, best_path_info_var[0], n_cities),
-            interval=1000,  # 1 second between frames
+            interval=frames_per_update_var, 
             blit=False
         )
         
@@ -108,6 +110,29 @@ def update_cities(val, fig, ax, slider_ax, points_var, all_paths_var, distances_
         
     except Exception as e:
         print(f"Error updating cities: {e}")
+
+def update_speed(val, fig, anim_var, all_paths, ax, points, distances, best_path_info_var, n_cities):
+    """Update the speed/frames per update when the slider changes."""
+
+    global frames_per_update_var
+    frames_per_update_var = int(val)
+
+    try:
+        # Update the animation
+        anim_var[0].event_source.stop()
+        anim_var[0] = FuncAnimation(
+            fig, update,
+            frames=len(all_paths),
+            fargs=(ax, points, all_paths, distances, best_path_info_var[0], n_cities),
+            interval=frames_per_update_var,  
+            blit=False
+        )
+        
+        # Redraw the figure
+        fig.canvas.draw_idle()
+        
+    except Exception as e:
+        print(f"Error changing speed: {e}")
 
 def main():
     try:
@@ -145,16 +170,27 @@ def main():
         ax = fig.add_subplot(111)
         
         # Create slider axis
-        slider_ax = fig.add_axes([0.2, 0.02, 0.6, 0.03])
+        city_slider_ax = fig.add_axes([0.2, 0.05, 0.6, 0.03])
+        speed_slider_ax = fig.add_axes([0.2, 0.01, 0.6, 0.03])
         
-        # Create slider
+        # Create slider for cities
         slider = Slider(
-            ax=slider_ax,
+            ax=city_slider_ax,
             label='Number of Cities',
             valmin=3,
             valmax=8,
             valinit=n_cities,
             valstep=1
+        )
+
+        #Create slider for speed
+        speed_slider = Slider(
+            ax=speed_slider_ax,
+            label='Frames per Update',
+            valmin=100,
+            valmax=1000,
+            valinit=500,
+            valstep=100
         )
         
         # Create variables to store data that needs to be updated
@@ -170,7 +206,7 @@ def main():
             fig, update,
             frames=len(all_paths),
             fargs=(ax, points, all_paths, distances, best_path_info, n_cities),
-            interval=1000,  # 1 second between frames
+            interval=frames_per_update_var,  # 1 second between frames
             blit=False
         )
         
@@ -178,8 +214,11 @@ def main():
         anim_var[0] = anim
         
         # Connect slider to update function
-        slider.on_changed(lambda val: update_cities(val, fig, ax, slider_ax, points_var, all_paths_var, distances_var, best_path_info_var, anim_var, n_cities_var))
-        
+        slider.on_changed(lambda val: update_cities(val, fig, ax, points_var, all_paths_var, distances_var, best_path_info_var, anim_var, n_cities_var))
+        speed_slider.on_changed(
+    lambda val: update_speed(val, fig, anim_var, all_paths_var[0], ax, points_var[0], distances_var[0], best_path_info_var, n_cities_var[0])
+)
+
         print("Starting animation...")
         plt.show()
         
