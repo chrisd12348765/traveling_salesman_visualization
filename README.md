@@ -7,6 +7,8 @@ program to give a visual example of the brute force/naive method to solving the 
 
 ## Usage
 
+IF you only care about viewing the animation, simply click my_animation.gif. No other steps required! If you would like the code, keep reading.
+
 To view this program on your own, you will need a code editor or IDE (Visual Studio Code is reccomended if you don't have one).
 Next, download the files by pressing the <> Code button on GitHub and then Download. 
 Next, unzip the download and then open [tsp_visualization.py](tsp_visualization.py) in VSCode. 
