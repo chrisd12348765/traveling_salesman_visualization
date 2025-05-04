@@ -54,7 +54,7 @@ def update(frame, ax, points, all_paths, distances, best_path_info, n_cities):
             ax.annotate(f'City {i}', (x, y), xytext=(5, 5), textcoords='offset points')
         
         # Update title with current distance, best distance, and number of cities
-        ax.set_title(f'Cities: {n_cities} | Current Distance: {current_distance:.2f}\nBest Distance: {best_path_info["distance"]:.2f}')
+        ax.set_title(f'Cities: {n_cities} | Current Distance: {current_distance:.2f}\nBest Possible Distance: {best_path_info["distance"]:.2f}\nTotal Paths: {len(all_paths)}')
         
         # Set axis limits with some padding
         ax.set_xlim(-10, 110)
@@ -140,7 +140,7 @@ def main():
         plt.switch_backend('TkAgg')
         
         # Initial number of cities
-        n_cities = 4
+        n_cities = 5
         
         print("Generating random points...")
         points = generate_random_points(n_cities)
@@ -189,7 +189,7 @@ def main():
             label='Frames per Update',
             valmin=100,
             valmax=1000,
-            valinit=500,
+            valinit=frames_per_update_var,
             valstep=100
         )
         
